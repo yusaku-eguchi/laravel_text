@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\BlowfishEncrypter;
 use Illuminate\Encryption\MissingAppKeyException;
-use Laravel\Sanctum\Exceptions\MissingAbilityException;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,16 +16,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('encrypter', function ($app) {
-            $config = $app->make('config')->get('app');
+        $this->app->singleton(
+            'encrypter',
+            function ($app) {
+                $config = $app->make('config')->get('app');
 
-            return new BlowfishEncrypter($this->parseKey($config));
-        });
+                return new BlowfishEncrypter($this->parseKey($config));
+            }
+        );
     }
 
     protected function parseKey(array $config)
     {
-        if (Str::startsWith($key = $this->key($config), $prefix = 'base64:')){
+        if (Str::startsWith($key = $this->key($config), $prefix = 'base64:')) {
             $key = base64_decode(Str::after($key, $prefix));
         }
 
