@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            \App\DataProvider\PublisherRepositoryInterface::class,
+            \App\Domain\Repository\PublisherRepository::class,
+        );
         // $this->app->singleton(
         //     'encrypter',
         //     function ($app) {
