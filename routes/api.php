@@ -19,3 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/publishers', [App\Http\Controllers\PublisherAction::class, 'create']);
+// Route::get('/users', 'App\Http\Controllers\UserAction::class');
+
+// Route::group(['middleware' => 'api'], function ($router) {
+//     Route::post('/user/login', 'App\Http\Controllers\User\LoginAction::class');
+//     Route::post('/users/', 'App\Http\controllers\User\RetrieveAction::class')
+//         ->middleware('auth:jwt');
+// });
+
