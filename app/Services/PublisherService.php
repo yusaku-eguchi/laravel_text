@@ -5,27 +5,26 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Publisher;
+use App\Repositories\Publisher\PublisherRepositoryInterface;
 
 class PublisherService
 {
+    private $publisher;
+
+    public function __construct(PublisherRepositoryInterface $publisher) {
+        $this->publisher = $publisher;
+    }
     public function exist(string $name)
     {
-        $count = Publisher::whereName($name)->count();
-        if ($count > 0) {
-            return true;
+        
+        if (!$this->publisher->findByName($name)) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function store(string $name, string $address): int
     {
-        $publisher = Publisher::create(
-            [
-                'name' => $name,
-                'address' => $address
-            ]
-        );
-
-        return (int)$publisher->id;
+        return $this->publisher->store($name, $address);
     }
 }
