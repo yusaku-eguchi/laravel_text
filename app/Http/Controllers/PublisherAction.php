@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Services\PublisherService;
+use App\Http\Requests\PublisherCreateRequest;
 
 class PublisherAction extends Controller
 {
@@ -15,13 +16,16 @@ class PublisherAction extends Controller
         $this->publisher = $publisher;
     }
 
-    public function create(Request $request)
+    public function create(PublisherCreateRequest $request)
     {
-        if ($this->publisher->exist($request->name)) {
+
+        $name = $request->get('name');
+        $address = $request->get('address');
+        if ($this->publisher->exist($name)) {
             return response('', Response::HTTP_OK);
         }
 
-        $id = $this->publisher->store($request->name, $request->address);
+        $id = $this->publisher->store($name, $address);
         return response('', Response::HTTP_CREATED)
             ->header('Location', '/api/publishers/' . $id);
     }
