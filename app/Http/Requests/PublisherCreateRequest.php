@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class PublisherCreateRequest extends FormRequest
 {
@@ -24,7 +26,24 @@ class PublisherCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required'],
+            'address' => ['required'],
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => '会社名は必須です。',
+            'address.required' => '住所は必須です。'
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $res = response()->json([
+            'errors' => $validator->errors(),
+        ], 400);
+        throw new HttpResponseException($res);
     }
 }
